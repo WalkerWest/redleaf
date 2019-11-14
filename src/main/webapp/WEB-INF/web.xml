@@ -3,7 +3,8 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-  <display-name>Redleaf Web Application</display-name>
+
+	<display-name>Redleaf Web Application</display-name>
   
     <!-- support for JEE cluster, remove this line if you want to put non-serializable objects into the java_session() -->
     <distributable/>
@@ -20,6 +21,7 @@
 
     <!-- Attach the JSR223 script factory to the servlet context -->
     <listener><listener-class>php.java.servlet.ContextLoaderListener</listener-class></listener>
+	<listener><listener-class>redleaf.RLContextListener</listener-class></listener>
 
     <!-- PHP Servlet: back-end for Apache or IIS -->
     <servlet><servlet-name>PhpJavaServlet</servlet-name><servlet-class>php.java.servlet.PhpJavaServlet</servlet-class></servlet>
@@ -37,5 +39,5 @@
     <welcome-file-list>
         <welcome-file>index.php</welcome-file>
     </welcome-file-list>
-
+    
 </web-app>
