@@ -48,11 +48,11 @@ public class RLPrefs {
 			//System.out.println("myPref is "+myPref.toString());
 			
 			if (pref.get(myKey, "")==null || pref.get(myKey,"").equals("")) {
-				if(myKey.equals("ErpDbSrv")) pref.put(myKey, "loader.walkerwest.net");				
+				if(myKey.equals("ErpDbSrv")) pref.put(myKey, "loader.flandersinc.com");				
 				else if(myKey.equals("ErpDbPort")) pref.put(myKey, "1433");				
 				else if(myKey.equals("ErpDbName")) pref.put(myKey, "Loader");				
 				else if(myKey.equals("ErpDbUser")) pref.put(myKey, "admin");				
-				else if(myKey.equals("ErpDbPasswd")) pref.put(myKey, "******");
+				else if(myKey.equals("ErpDbPasswd")) pref.put(myKey, "hedden");
 			}
 			
 			if(myKey.equals("ErpDbSrv")) this.setErpDbSrv(pref.get(myKey,""));				

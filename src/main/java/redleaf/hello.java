@@ -9,6 +9,7 @@ public class hello {
 		RLSingle.getInstance().printTestCounter();
 		System.out.println("Hello, world!");
 		
+		/*
 		String dbVersion=null;
 		ResultSet dbInfo;
 		try {
@@ -24,6 +25,7 @@ public class hello {
 		System.out.print("The database version is ... ");
 		if (dbVersion==null) System.out.println("NOT AVAILABLE!");
 		else System.out.println(dbVersion);
+		*/
 		
 	}
 	
