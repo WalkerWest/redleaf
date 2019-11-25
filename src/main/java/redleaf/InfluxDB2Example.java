@@ -133,9 +133,7 @@ public class InfluxDB2Example implements Runnable {
 			if(mySize>0) {
 				System.out.println(gson.toJson(speedList.get(0)));
 				System.out.println(gson.toJson(speedList.get(1)));
-
 			}
-			
 		}
 		
 	}
