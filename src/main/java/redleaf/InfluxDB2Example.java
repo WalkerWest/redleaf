@@ -116,6 +116,28 @@ public class InfluxDB2Example implements Runnable {
 			
 		}
 		RLSingle.getInstance().doneWithPoints();
+		String cardQuery ="select \"Card ID\", \"Device\" from \"SpeedNforce V1\" where "
+				+ "time >= %s and time <= %s and Device='%s'";
+		int mySize=0;
+		for (String dev : this.devs) {
+			String queryStr=String.format(cardQuery, start, stop, dev);
+			System.out.println("The query string is: "+queryStr);
+			Query query = new Query(queryStr);
+			TimeUnit timeUnit = TimeUnit.NANOSECONDS;
+			QueryResult r = influx.query(query, timeUnit);
+			InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
+			List<SpeedNForceV1> speedList=resultMapper.toPOJO(r, SpeedNForceV1.class);
+			Gson gson = new Gson();
+			mySize=speedList.size();
+			System.out.println(mySize);
+			if(mySize>0) {
+				System.out.println(gson.toJson(speedList.get(0)));
+				System.out.println(gson.toJson(speedList.get(1)));
+
+			}
+			
+		}
+		
 	}
 
 	
