@@ -18,6 +18,10 @@ public class RLSingle {
 		return SingletonHelper.INSTANCE;
 	}
 	
+	public void doneWithPoints() {
+		System.out.println("We're done querying the points!");
+	}
+	
 	private int testCounter=0;
 	public int getTestCounter() { return testCounter; }
 	public void setTestCounter(int testCounter) { this.testCounter = testCounter; }
