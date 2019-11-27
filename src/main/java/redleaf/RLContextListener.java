@@ -36,6 +36,7 @@ public class RLContextListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent arg0) {
 		RLSingle.getInstance().setDwContext(arg0.getServletContext());
 		RLSingle.getInstance().printTestCounter();
+		/*
 		try {
 			File forkFile=new File(getClass().getClassLoader().getResource("forklift.csv").getFile());
 			BufferedReader csvReader = new BufferedReader(new FileReader(forkFile));
@@ -69,6 +70,7 @@ public class RLContextListener implements ServletContextListener {
 		for (WaterResult w : WaterFactory.getData()) {
 			System.out.print(w.getLocation());
 		}
+		*/
 	}
 
 }

@@ -1,0 +1,74 @@
+<?page title="WISDOM Modules" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="Drill Production Monitor" border="normal">
+<div xmlns:n="native">
+<n:p><n:b>Contact:</n:b> Eric Gerst</n:p>
+<n:ul>
+<n:li>FLANDERS installs a sensor array onboard the machine</n:li>
+<n:li>The sensors are connected to a PLC running our production monitor software</n:li>
+<n:li>A Microsoft Windows, touch screen tablet provides an operator interface</n:li>
+<n:li>The software on the tablet creates production records in Microsoft SQL Server</n:li>
+<n:li>Reports are accessible at <a href="https://customer.flandersinc.com">https://customer.flandersinc.com</a>.</n:li>
+</n:ul>
+<n:p><n:b>Price:</n:b> $75K</n:p>
+</div>
+</window>
+<window title="Dragline Production Monitor" border="normal">
+<div xmlns:n="native">
+<n:p><n:b>Contact:</n:b> Alvaro Storbeck</n:p>
+<n:ul>
+<n:li>Our production monitor software runs in a soft PLC loaded on a Windows PC</n:li>
+<n:li>The soft PLC interfaces with the sensors connected to the existing, control PLC</n:li>
+<n:li>The production monitor software writes production records in Microsoft SQL Server</n:li>
+<n:li>A Microsoft Windows, touch screen computer provides an operator interface</n:li>
+<n:li>Reports are accessible at <a href="https://customer.flandersinc.com">https://customer.flandersinc.com</a>.</n:li>
+</n:ul>
+<n:p><n:b>Price:</n:b> $50K</n:p>
+</div>
+</window>
+<window title="Loader Production Monitor" border="normal">
+<div xmlns:n="native">
+<n:p><n:b>Contact:</n:b> Rich Fifield</n:p>
+<n:ul>
+<n:li>Bundled with OEM (MMD) product; the loader is an unmanned piece of machinery that sits between a shovel (which places material upon it)
+and the haul trucks (which it spots and loads ).</n:li>
+<n:li>FLANDERS sensors and PLC program are included with the loader</n:li>
+<n:li>A "comms computer" receives data from the PLC program and creates production records</n:li>
+<n:li>A Microsoft Windows, touch screen computer onboard the shovel provides an operator interface</n:li>
+<n:li>Reports are accessible at <a href="https://customer.flandersinc.com">https://customer.flandersinc.com</a>.</n:li>
+</n:ul>
+<n:p><n:b>Price:</n:b> $1.5MK</n:p>
+</div>
+</window>
+<window title="Fixed Plant Health Monitor" border="normal">
+<div xmlns:n="native">
+<n:p><n:b>Contact:</n:b> J.D. Hudson</n:p>
+<n:ul>
+<n:li>IoT-based wireless vibration, magnetic and temperature sensors are installed on critical assets within the plant</n:li>
+<n:li>One or more "communication nodes" aggregate the onsite data and send it into the cloud</n:li>
+<n:li>Alerts can be configured to notify personnel when conditions are met</n:li>
+<n:li>Sensor data can be trended and analyzed at <a href="https://customer.flandersinc.com">https://customer.flandersinc.com</a>.</n:li>
+</n:ul>
+<n:p><n:b>Price:</n:b> $1,500 per asset per month</n:p>
+</div>
+</window>
+<window title="Dragline Health Monitor" border="normal">
+<div xmlns:n="native">
+<n:p><n:b>Contact:</n:b> Jonathan Woodham</n:p>
+<n:ul>
+<n:li>Field service inspection program performed on a route that occurs every six weeks</n:li>
+<n:li>Tablet-entered data is compiled into an approximately 200 page report and made available on our website (Silver)</n:li>
+<n:li>Data is ran through FLANDERS algorithms to produce color-coded deck layouts that indicate which components needs attention (Gold)</n:li>
+<n:li>The expected remaining life of each motor / generator onboard the machine is projected (Platinum)</n:li>
+<n:li>All artifacts (Silver, Gold and Platinum) are accessible at <a href="https://customer.flandersinc.com">https://customer.flandersinc.com</a>.</n:li>
+</n:ul>
+<n:p><n:b>Price:</n:b></n:p>
+<n:ul>
+<n:li>free with inspection (Silver)</n:li>
+<n:li>$1,400 per month for first dragline and $350 for each additional one (Gold)</n:li>
+<n:li>$2,000 per month for first dragline and $500 for each additional one (Platinum)</n:li>
+</n:ul>
+</div>
+</window>
+
+</zk>
