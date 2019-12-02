@@ -1,12 +1,13 @@
 package redleaf;
 
 import java.time.Instant;
+import java.util.concurrent.TimeUnit;
 
 import org.influxdb.annotation.Column;
 import org.influxdb.annotation.Measurement;
 import org.influxdb.annotation.TimeColumn;
 
-@Measurement(name="Position")
+@Measurement(name="Position",timeUnit=TimeUnit.NANOSECONDS)
 public class Position {
 	
 	public Position() { }

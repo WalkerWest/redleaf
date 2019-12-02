@@ -23,6 +23,14 @@ public class RLContextListener implements ServletContextListener {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	//@Override
+	public void contextInitialized(ServletContextEvent arg0) {
+		RLSingle.getInstance().setDwContext(arg0.getServletContext());
+		RLSingle.getInstance().printTestCounter();
+		pryorStuff();
+	}
+	
 
 	private HashMap<String,String> palletMap = new HashMap<String,String>();
 	private HashMap<String,String> truckMap = new HashMap<String,String>();
@@ -31,12 +39,8 @@ public class RLContextListener implements ServletContextListener {
 	float xLow=(float) 0.0,   xHigh=(float) 140.0, 
 		  yLow=(float) -30.0, yHigh=(float) 250.0, 
 		  zLow=(float) 0.0,   zHigh=(float) 3.8;
-
-	//@Override
-	public void contextInitialized(ServletContextEvent arg0) {
-		RLSingle.getInstance().setDwContext(arg0.getServletContext());
-		RLSingle.getInstance().printTestCounter();
-		/*
+	
+	public void pryorStuff() {
 		try {
 			File forkFile=new File(getClass().getClassLoader().getResource("forklift.csv").getFile());
 			BufferedReader csvReader = new BufferedReader(new FileReader(forkFile));
@@ -47,13 +51,9 @@ public class RLContextListener implements ServletContextListener {
 			    if(data.length>=3 && !data[2].equals(""))
 			    	palletMap.put(data[2].toUpperCase(),data[1].toUpperCase());
 			    truckMap.put(data[1].toUpperCase(),data[0]);
-			    // do something with the data
 			}
 			csvReader.close();		
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (IOException e) { e.printStackTrace(); }
 		Gson gson = new Gson();
 		System.out.println("The palletMap is:" +gson.toJson(palletMap));
 		System.out.println("The truckMap is:" +gson.toJson(truckMap));		
@@ -70,7 +70,6 @@ public class RLContextListener implements ServletContextListener {
 		for (WaterResult w : WaterFactory.getData()) {
 			System.out.print(w.getLocation());
 		}
-		*/
 	}
 
 }

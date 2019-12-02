@@ -1,8 +1,16 @@
 package redleaf;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.concurrent.TimeUnit;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +46,8 @@ public class InfluxDB2Example implements Runnable {
 				"http://localhost:8086","agsft","agsft1234"
 			);
 		influx.setDatabase("cuwb");
-		String queryStr="show tag values from \"Position\" with key = \"Device\" where time >= "+start+" and time <= "+stop;
+		String queryStr="show tag values from \"Position\" with key = \"Device\" "
+				+ "where time >= "+start+" and time <= "+stop;
 		System.out.println("The queryStr is: "+queryStr);
 		Query query = 
 				//new Query("select * from h2o_feet LIMIT 5","NOAA_water_database");
@@ -79,14 +88,18 @@ public class InfluxDB2Example implements Runnable {
 		this.devs=devs;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void run() {
 		InfluxDB influx = InfluxDBFactory.connect(
 				//"http://192.168.174.28:8086","nouser",""
 				"http://localhost:8086","agsft","agsft1234"
 			);
 		influx.setDatabase("cuwb");
-		String sqlQuery = "select X,Y,Z from Position where Quality>0 and \"Anchor Count\" > 5 and "
-				+ "time >= %s and time <= %s and Device='%s' group by \"Destination Address\" fill(-99999)";
+		HashMap<String,List<Position>> netappData = new HashMap<String,List<Position>>();
+		String sqlQuery = "select X,Y,Z from Position "
+				+ "where Quality>0 and \"Anchor Count\" > 5 and "
+				+ "time >= %s and time <= %s and Device='%s' "
+				+ "group by \"Destination Address\" fill(-99999)";
 		for (String dev : this.devs) {
 			String queryStr=String.format(sqlQuery, start, stop, dev);
 			System.out.println("The query string is: "+queryStr);
@@ -95,8 +108,10 @@ public class InfluxDB2Example implements Runnable {
 			QueryResult r = influx.query(query, timeUnit);
 			InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
 			List<Position> posList=resultMapper.toPOJO(r, Position.class);
-			Gson gson = new Gson();
-			System.out.println(posList.size());
+			if(posList.size()>0) {
+				System.out.println(posList.size());
+				netappData.put(dev, posList);
+			}
 			/*
 			for (Result res : r.getResults()) {
 				if(res!=null && res.getSeries()!=null) {
@@ -119,6 +134,10 @@ public class InfluxDB2Example implements Runnable {
 		String cardQuery ="select \"Card ID\", \"Device\" from \"SpeedNforce V1\" where "
 				+ "time >= %s and time <= %s and Device='%s'";
 		int mySize=0;
+		//HashMap<Integer,List<Instant>> cardTimePairs = new HashMap<Integer,List<Instant>>();
+		//HashMap<Integer,List<String>> cardSerialPairs = new HashMap<Integer,List<String>>();
+		HashMap<Integer,LinkedList<SpeedNForceV1>> cardSpeedNForcePairs = 
+				new HashMap<Integer,LinkedList<SpeedNForceV1>>(); 
 		for (String dev : this.devs) {
 			String queryStr=String.format(cardQuery, start, stop, dev);
 			System.out.println("The query string is: "+queryStr);
@@ -134,9 +153,48 @@ public class InfluxDB2Example implements Runnable {
 				System.out.println(gson.toJson(speedList.get(0)));
 				System.out.println(gson.toJson(speedList.get(1)));
 			}
+			for (SpeedNForceV1 entry : speedList) {
+				
+				if(!cardSpeedNForcePairs.containsKey(entry.getCardId())) {
+					LinkedList<SpeedNForceV1> myList = new LinkedList<SpeedNForceV1>();
+					myList.add(entry);
+					cardSpeedNForcePairs.put(entry.getCardId(),myList);
+				}
+				else 
+					cardSpeedNForcePairs.get(entry.getCardId()).add(entry);
+				/*
+				if(!cardTimePairs.containsKey(entry.getCardId())) {
+					cardTimePairs.put(entry.getCardId(), Arrays.asList(entry.getTime()));
+					cardSerialPairs.put(entry.getCardId(), Arrays.asList(entry.getDevice()));
+				} else {
+					cardTimePairs.get(entry.getCardId()).add(entry.getTime());
+					cardSerialPairs.get(entry.getCardId()).add(entry.getDevice());
+				}
+				*/
+			}
+		}
+		for (Integer key : cardSpeedNForcePairs.keySet()) {
+			Gson gson = new Gson();
+			//System.out.println("Natural list: "+gson.toJson(cardSpeedNForcePairs.get(key)));
+			Collections.sort(cardSpeedNForcePairs.get(key));
+			//System.out.println(" Sorted list: "+gson.toJson(cardSpeedNForcePairs.get(key)));
+			Instant low = cardSpeedNForcePairs.get(key).getFirst().getTime();
+			Instant high = cardSpeedNForcePairs.get(key).getLast().getTime();
+			DateFormat df = new SimpleDateFormat("dd MMM yyyy hh:mm:ss:SSS zzz");
+			
+			Double myLow = (double)low.toEpochMilli()/1000000;
+			Long myLowLong = low.toEpochMilli()/1000000;
+			Long myLowSecs = myLowLong/1000000;
+			Long leftOver=(low.toEpochMilli()%1000000)*1000000;
+			Long secsLeftOver = (myLowLong%1000000);
+			/*
+			System.out.print(low.getNano()+" - "+low.toEpochMilli()+" - "+low.getEpochSecond()+" - "+low.getEpochSecond()/1000+
+					" - "+myLow+" ("+leftOver+") - "+myLowSecs+" ("+secsLeftOver+leftOver+") - ");
+			System.out.println("Low is "+df.format(myLow)); //+" ... and high is: "+Timestamp.from(high));
+			*/
+			System.out.println("Low is "+df.format(myLow));
 		}
 		
 	}
-
 	
 }
