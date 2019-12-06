@@ -183,6 +183,8 @@ public class InfluxDB2Example implements Runnable {
 			DateFormat df = new SimpleDateFormat("dd MMM yyyy hh:mm:ss:SSS zzz");
 			
 			Double myLow = (double)low.toEpochMilli()/1000000;
+			Double myHigh = (double)high.toEpochMilli()/1000000;
+			
 			Long myLowLong = low.toEpochMilli()/1000000;
 			Long myLowSecs = myLowLong/1000000;
 			Long leftOver=(low.toEpochMilli()%1000000)*1000000;
@@ -192,7 +194,8 @@ public class InfluxDB2Example implements Runnable {
 					" - "+myLow+" ("+leftOver+") - "+myLowSecs+" ("+secsLeftOver+leftOver+") - ");
 			System.out.println("Low is "+df.format(myLow)); //+" ... and high is: "+Timestamp.from(high));
 			*/
-			System.out.println("Low is "+df.format(myLow));
+			System.out.print("Low is "+df.format(myLow));
+			System.out.println(" ... and High is "+df.format(myHigh));
 		}
 		
 	}

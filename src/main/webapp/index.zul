@@ -1,6 +1,40 @@
-<?page title="Auto Generated index.zul"?>
-<window title="Hello World!!" border="normal" width="200px">
+<?page title="Atlar5D Reports"?>
+<zk>
+<style>
+.z-loading { top: 50% !important; left: 45% !important; align:
+		center; vertical-align: middle; }
+</style>
+<window title="Productivity Report" border="normal"  width="650px"
+	apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('redleaf.RedleafViewModel')"
+	mode="overlapped" position="center,middle"> 
 
-<label value="You are using: ${desktop.webApp.version}"/>
+<!-- <label value="You are using: ${desktop.webApp.version}"/> -->
 
+<groupbox form="@id('fx') @load(vm.params) @save(vm.params, before='save')">
+    <grid hflex="true">
+        <columns>
+            <column width="150px"/>
+            <column width="295px"/>
+        </columns>
+        <rows>
+            <row>
+                Start <datebox format="long+medium" cols="12" value="@bind(fx.start)" width="275px"/>
+            </row>
+            <row>
+                Stop <datebox format="long+medium" cols="12" value="@bind(fx.stop)" width="275px"/>
+            </row>
+            <row>
+                Driver <intbox value="@bind(fx.driver) "/>
+            </row>
+            <row>
+            	<hbox></hbox>
+            	<hbox>
+            	<button autodisable="self" onClick="@command('save')" label="Run"/>
+            	<button autodisable="self" onClick="@command('reload')" label="Cancel"/>
+            	</hbox>
+            </row>
+        </rows>
+    </grid>
+</groupbox>
 </window>
+</zk>
