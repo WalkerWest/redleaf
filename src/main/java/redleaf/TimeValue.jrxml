@@ -4,19 +4,12 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Water"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="PinState"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="levelDescription" class="java.lang.String">
-		<fieldDescription><![CDATA[levelDescription]]></fieldDescription>
-	</field>
-	<field name="location" class="java.lang.String">
-		<fieldDescription><![CDATA[location]]></fieldDescription>
-	</field>
-	<field name="waterLevel" class="java.lang.Long">
-		<fieldDescription><![CDATA[waterLevel]]></fieldDescription>
-	</field>
+	<field name="friendlyId" class="java.lang.Integer"/>
+	<field name="stateString" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -27,22 +20,36 @@
 		<band height="35" splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="33" splitType="Stretch">
+		<band height="15" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<staticText>
-				<reportElement x="87" y="2" width="100" height="20" uuid="b65492f7-2503-4191-8379-1283f5154511"/>
-				<text><![CDATA[levelDescription]]></text>
+				<reportElement x="84" y="0" width="100" height="15" uuid="a9dacd5b-7e79-4148-9fc5-f3fcca16f7b6">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b7443e27-a2b5-4114-8686-f1923003b0d8"/>
+				</reportElement>
+				<text><![CDATA[friendlyId]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="221" y="0" width="100" height="15" uuid="1ef553de-22d5-45ac-b6ce-e63902ec790d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7e82ee44-8b52-4ddc-8c78-16579f86f6f5"/>
+				</reportElement>
+				<text><![CDATA[stateString]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="22" splitType="Stretch">
+		<band height="48" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<textField>
-				<reportElement x="87" y="0" width="100" height="20" uuid="35f2dc12-62c4-45d9-961a-769dfc4d640d"/>
-				<textFieldExpression><![CDATA[$F{levelDescription}]]></textFieldExpression>
+				<reportElement x="84" y="3" width="100" height="30" uuid="868a8a15-2214-4903-aeef-15c1b7ec4c7e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b7443e27-a2b5-4114-8686-f1923003b0d8"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{friendlyId}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="190" y="0" width="100" height="20" uuid="56c6e01b-f3cc-40ce-b4d2-540f2ad9f44e"/>
-				<textFieldExpression><![CDATA[$F{location}]]></textFieldExpression>
+				<reportElement x="221" y="18" width="100" height="30" uuid="a4ccef4b-43a0-42cc-b15c-f6d19fd43099">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7e82ee44-8b52-4ddc-8c78-16579f86f6f5"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{stateString}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

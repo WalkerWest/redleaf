@@ -13,7 +13,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDBFactory;
+import org.influxdb.dto.Query;
+import org.influxdb.dto.QueryResult;
+import org.influxdb.impl.InfluxDBResultMapper;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
@@ -36,10 +42,42 @@ public class RedleafViewModel {
 			15137L);
 	public ReportParams getParams() { return params; }
 	public void setParams(ReportParams params) { this.params = params; }
+	
+	private HashMap<String,Integer> doors = new HashMap<String,Integer>();
 
 	@Init
 	public void init() {
 		System.out.println("I have initialized the view model");
+		doors.put("01040300",70);
+		doors.put("01040382",69);
+		doors.put("01040372",68);
+		doors.put("01040344",67);
+		doors.put("01040383",66);
+		doors.put("0104036f",65);
+		doors.put("0104035b",64);
+		doors.put("01040380",63);
+		doors.put("01040399",62);
+		doors.put("0104039f",61);
+		doors.put("0104039b",60);
+		doors.put("01040392",59);
+		doors.put("0104032a",58);
+		doors.put("01040387",57);
+		doors.put("01040395",56);
+		doors.put("01040358",55);
+		doors.put("010402f1",54);
+		doors.put("01040379",53);
+		doors.put("01040374",52);
+		doors.put("0104034f",51);
+		doors.put("01040373",50);
+		doors.put("01040368",49);
+		doors.put("0104037b",48);
+		doors.put("0104035d",47);
+		doors.put("01040313",46);
+		doors.put("0104036c",45);
+		doors.put("01040370",44);
+		doors.put("010402f3",43);
+		doors.put("0104035f",42);
+		doors.put("01040377",41);
 	}
 	
 	@Command
@@ -60,6 +98,27 @@ public class RedleafViewModel {
 		  yLow=(float) -30.0, yHigh=(float) 250.0, 
 		  zLow=(float) 0.0,   zHigh=(float) 3.8;
 	
+	public void dockStatus() {
+		InfluxDB influx = InfluxDBFactory.connect(
+				//"http://192.168.174.28:8086","nouser",""
+				"http://localhost:8086","agsft","agsft1234"
+			);
+		influx.setDatabase("cuwb");
+		HashMap<String,List<Position>> netappData = new HashMap<String,List<Position>>();
+		String sqlQuery = "select last(*) from \"Pin State Report\" where time >= now()-2000ms and Device=~/01040/ group by Device";
+		Query query = new Query(sqlQuery);
+		TimeUnit timeUnit = TimeUnit.NANOSECONDS;
+		QueryResult r = influx.query(query, timeUnit);
+		InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
+		List<PinState> dockList=resultMapper.toPOJO(r, PinState.class);
+		Gson gson = new Gson();
+		int mySize=dockList.size();
+		System.out.println(mySize);
+		if(mySize>0) {
+			System.out.println(gson.toJson(dockList.get(0)));
+			System.out.println(gson.toJson(dockList.get(1)));
+		}
+	}
 	
 	public void pryorStuff() {
 		try {
@@ -99,7 +158,8 @@ public class RedleafViewModel {
 		System.out.println("The new fork truck driver is "+this.getParams().getDriver());
 		System.out.println("The start time is "+this.getParams().getStart().toInstant().toEpochMilli());
 		System.out.println("The stop time is "+this.getParams().getStop().toInstant().toEpochMilli());
-		this.pryorStuff();
+		//this.pryorStuff();
+		this.dockStatus();
 		String reportPath=RLSingle.getInstance().getDeploymentDirectory();
 		System.out.println("The report path is "+reportPath);
 		String reportFilename="TVTest"+System.currentTimeMillis()+".pdf";
