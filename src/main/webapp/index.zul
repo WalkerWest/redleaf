@@ -3,13 +3,40 @@
 <style>
 .z-loading { top: 50% !important; left: 45% !important; align:
 		center; vertical-align: middle; }
+.z-window { background-color: #71bf44; }
+.z-button { background-color: #3e8e0e; }
+.z-button:hover { background-color: #71bf44; }
+.z-combobox-input:focus, .z-bandbox-input:focus, .z-datebox-input:focus, .z-timebox-input:focus, .z-spinner-input:focus, .z-doublespinner-input:focus { border-color: #3e8e0e !important; }
+.z-combobox-open .z-combobox-button, .z-bandbox-open .z-bandbox-button, .z-datebox-open .z-datebox-button { border-color: #3e8e0e !important; }
+.z-combobox-button:active, .z-bandbox-button:active, .z-datebox-button:active, .z-timebox-button:active, .z-spinner-button:active, .z-doublespinner-button:active {
+  border-color: #3e8e0e !important;
+  background-color: #71bf44 !important;
+}
+.z-combobox-button:hover, .z-bandbox-button:hover, .z-datebox-button:hover, .z-timebox-button:hover, .z-spinner-button:hover, .z-doublespinner-button:hover {
+  border-color: #3e8e0e !important;
+  background: #a4f274 !important;
+}
+.z-combobox-popup, .z-bandbox-popup, .z-datebox-popup, .z-timebox-popup {
+  border-color: #3e8e0e !important;
+}
+.z-grid-body {  overflow:hidden !important; }
+.z-button:active { background-color: #3e8e0e; } 
+.z-button:focus { background-color: #71bf44; }
+.z-comboitem-selected * { color: #3e8e0e; }
+.z-comboitem:hover { background-color: #d4d6d9; }
+ .z-row:hover>.z-row-inner, .z-row:hover>.z-cell { background-color: #d4d6d9;}
+ .z-calendar-cell:hover { background-color: #d4d6d9; }
+ .z-calendar-selected { background: #3e8e0e; }
+ .z-timebox-button>a:hover, .z-spinner-button>a:hover, .z-doublespinner-button>a:hover { background: #d4d6d9; }
+ .z-combobox-popup, .z-bandbox-popup, .z-datebox-popup, .z-timebox-popup { border: 1px solid #3e8e0e !important; }
+  
 </style>
-<window title="Productivity Report" border="normal"  width="650px"
+<window title="Report Runner" border="normal"  width="548px" height="541px"
 	apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('redleaf.RedleafViewModel')"
 	mode="overlapped" position="center,middle"> 
 
 <!-- <label value="You are using: ${desktop.webApp.version}"/> -->
-
+<image src="/quarion_logo-450.png" height="100px"/>
 <groupbox form="@id('fx') @load(vm.params) @save(vm.params, before='save')">
     <grid hflex="true">
         <columns>
@@ -19,19 +46,20 @@
         <rows>
         	<row>
         		Report 
-        		<combobox id="reportCombo" autodrop="true" model="@bind(vm.reportModel)">
+        		<combobox id="reportCombo" autodrop="true" model="@bind(vm.reportModel)" 
+        			selectedItem="@bind(vm.selectedReport)">
         		<template name="model">
         			<comboitem label="@load(each.name)"/>
         		</template>
         		</combobox>
         	</row>
-            <row>
+            <row visible="@bind(vm.selectedReport.name eq 'Productivity')">
                 Start <datebox format="long+medium" cols="12" value="@bind(fx.start)" width="275px"/>
             </row>
-            <row>
+            <row visible="@bind(vm.selectedReport.name eq 'Productivity')">
                 Stop <datebox format="long+medium" cols="12" value="@bind(fx.stop)" width="275px"/>
             </row>
-            <row>
+            <row visible="@bind(vm.selectedReport.name eq 'Productivity')">
                 Driver <intbox value="@bind(fx.driver) "/>
             </row>
             <row>

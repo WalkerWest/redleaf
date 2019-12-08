@@ -8,7 +8,7 @@ import org.influxdb.annotation.Measurement;
 import org.influxdb.annotation.TimeColumn;
 
 @Measurement(name="Pin State Report",timeUnit=TimeUnit.NANOSECONDS)
-public class PinState {
+public class PinState implements Influxable {
 	
 	@TimeColumn
 	@Column(name="time")

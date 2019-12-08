@@ -7,7 +7,7 @@ import org.influxdb.annotation.Measurement;
 import org.influxdb.annotation.TimeColumn;
 
 @Measurement(name="h2o_feet")
-public class WaterResult {
+public class WaterResult implements Influxable {
 
 	/*
 	@TimeColumn

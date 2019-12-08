@@ -1,7 +1,9 @@
-package redleaf;
+package reports.dock_status;
 
 import java.util.Arrays;
 import java.util.List;
+
+import redleaf.PinState;
 
 public class PinStateFactory {
 	

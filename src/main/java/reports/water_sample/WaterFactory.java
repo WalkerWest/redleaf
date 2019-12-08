@@ -1,8 +1,10 @@
-package redleaf;
+package reports.water_sample;
 
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
+
+import redleaf.WaterResult;
 
 public class WaterFactory {
 	
