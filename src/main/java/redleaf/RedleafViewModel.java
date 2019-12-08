@@ -11,6 +11,8 @@ import java.io.InputStream;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -20,11 +22,15 @@ import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.influxdb.impl.InfluxDBResultMapper;
+import org.jboss.weld.environment.se.Weld;
+import org.jboss.weld.environment.se.WeldContainer;
+import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.util.media.AMedia;
 import org.zkoss.zul.Filedownload;
+import org.zkoss.zul.ListModelList;
 
 import com.google.gson.Gson;
 
@@ -44,6 +50,23 @@ public class RedleafViewModel {
 	public void setParams(ReportParams params) { this.params = params; }
 	
 	private HashMap<String,Integer> doors = new HashMap<String,Integer>();
+	
+	private ListModelList<Reportable> reportModel=new ListModelList<Reportable>();
+	public ListModelList<Reportable> getReportModel() { return reportModel; }
+	public void setReportModel(ListModelList<Reportable> reportModel) {
+		this.reportModel = reportModel;
+	}
+	
+	@AfterCompose
+	public void getReports() {
+		Weld weld = new Weld();
+		WeldContainer container = weld.initialize();
+		System.out.println("I am getting the report list ...");
+		ReportEngine engine = container.instance().select(ReportEngine.class).get();
+		List<Reportable> reportList=engine.getReports();
+		for(Reportable report:reportList) reportModel.add(report);
+		weld.shutdown();
+	}
 
 	@Init
 	public void init() {
@@ -53,30 +76,30 @@ public class RedleafViewModel {
 		doors.put("01040372",68);
 		doors.put("01040344",67);
 		doors.put("01040383",66);
-		doors.put("0104036f",65);
-		doors.put("0104035b",64);
+		doors.put("0104036F",65);
+		doors.put("0104035B",64);
 		doors.put("01040380",63);
 		doors.put("01040399",62);
-		doors.put("0104039f",61);
-		doors.put("0104039b",60);
+		doors.put("0104039F",61);
+		doors.put("0104039B",60);
 		doors.put("01040392",59);
-		doors.put("0104032a",58);
+		doors.put("0104032A",58);
 		doors.put("01040387",57);
 		doors.put("01040395",56);
 		doors.put("01040358",55);
-		doors.put("010402f1",54);
+		doors.put("010402F1",54);
 		doors.put("01040379",53);
 		doors.put("01040374",52);
-		doors.put("0104034f",51);
+		doors.put("0104034F",51);
 		doors.put("01040373",50);
 		doors.put("01040368",49);
-		doors.put("0104037b",48);
-		doors.put("0104035d",47);
+		doors.put("0104037B",48);
+		doors.put("0104035D",47);
 		doors.put("01040313",46);
-		doors.put("0104036c",45);
+		doors.put("0104036C",45);
 		doors.put("01040370",44);
-		doors.put("010402f3",43);
-		doors.put("0104035f",42);
+		doors.put("010402F3",43);
+		doors.put("0104035F",42);
 		doors.put("01040377",41);
 	}
 	
@@ -98,6 +121,8 @@ public class RedleafViewModel {
 		  yLow=(float) -30.0, yHigh=(float) 250.0, 
 		  zLow=(float) 0.0,   zHigh=(float) 3.8;
 	
+	private List<PinState> dockList = new ArrayList<PinState>();
+	
 	public void dockStatus() {
 		InfluxDB influx = InfluxDBFactory.connect(
 				//"http://192.168.174.28:8086","nouser",""
@@ -110,13 +135,20 @@ public class RedleafViewModel {
 		TimeUnit timeUnit = TimeUnit.NANOSECONDS;
 		QueryResult r = influx.query(query, timeUnit);
 		InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
-		List<PinState> dockList=resultMapper.toPOJO(r, PinState.class);
+		dockList=resultMapper.toPOJO(r, PinState.class);
 		Gson gson = new Gson();
 		int mySize=dockList.size();
 		System.out.println(mySize);
 		if(mySize>0) {
 			System.out.println(gson.toJson(dockList.get(0)));
-			System.out.println(gson.toJson(dockList.get(1)));
+			for(PinState ps : dockList) {
+				ps.setFriendlyId(doors.get(ps.getDevice()));
+			}
+			Collections.sort(dockList,new Comparator<PinState>() {
+				public int compare(PinState obj1,PinState obj2) {
+					return obj1.getFriendlyId().compareTo(obj2.getFriendlyId());
+				}
+			});
 		}
 	}
 	
@@ -171,7 +203,7 @@ public class RedleafViewModel {
 		} catch (FileNotFoundException e) { e.printStackTrace(); }
 	}
 	
-	private String jrResourceStream="redleaf/TimeValue.jasper";
+	private String jrResourceStream="redleaf/DockStatus.jasper";
 	public String getJrResourceStream() { return jrResourceStream; }
 	
 	private JasperPrint runReport(
@@ -182,7 +214,8 @@ public class RedleafViewModel {
 		try {
 			return (JasperPrint) JasperFillManager
 					.fillReport(jasperStream,reportParams,
-							new JRBeanCollectionDataSource(WaterFactory.getData()));
+							/* new JRBeanCollectionDataSource(WaterFactory.getData())*/
+							new JRBeanCollectionDataSource(dockList));
 		} catch (JRException e) { throw e; }
 	}
 	

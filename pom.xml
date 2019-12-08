@@ -101,7 +101,12 @@
 	        <groupId>net.sf.jasperreports</groupId>
 	        <artifactId>jasperreports-functions</artifactId>
 	        <version>6.10.0</version>
-    	</dependency>		
+    	</dependency>
+		<dependency>
+		    <groupId>org.jboss.weld.se</groupId>
+		    <artifactId>weld-se-core</artifactId>
+		    <version>2.2.4.Final</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>redleaf</finalName>

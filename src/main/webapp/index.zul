@@ -17,6 +17,14 @@
             <column width="295px"/>
         </columns>
         <rows>
+        	<row>
+        		Report 
+        		<combobox id="reportCombo" autodrop="true" model="@bind(vm.reportModel)">
+        		<template name="model">
+        			<comboitem label="@load(each.name)"/>
+        		</template>
+        		</combobox>
+        	</row>
             <row>
                 Start <datebox format="long+medium" cols="12" value="@bind(fx.start)" width="275px"/>
             </row>

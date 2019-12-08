@@ -61,10 +61,10 @@ public class PinState {
 	
 	public PinState() { }
 	
-	private Integer friendlyId;
+	private Integer friendlyId=9999;
 	public Integer getFriendlyId() { return friendlyId;	}
 	public void setFriendlyId(Integer friendlyId) {
-		this.friendlyId = friendlyId;
+		if(friendlyId!=null) this.friendlyId = friendlyId;
 	}
 	
 	private String stateString;

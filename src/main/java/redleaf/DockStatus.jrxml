@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.10.0.final using JasperReports Library version 6.10.0-unknown  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="TimeValue" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9b30f810-5563-46fd-ae82-ee81d3dadc89">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DockStatus" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9b30f810-5563-46fd-ae82-ee81d3dadc89">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -10,6 +10,9 @@
 	</queryString>
 	<field name="friendlyId" class="java.lang.Integer"/>
 	<field name="stateString" class="java.lang.String"/>
+	<field name="device" class="java.lang.String">
+		<fieldDescription><![CDATA[device]]></fieldDescription>
+	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -34,6 +37,12 @@
 				</reportElement>
 				<text><![CDATA[stateString]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="284" y="0" width="100" height="15" uuid="7e6bdde7-d752-46e7-87fa-3067cf55d855">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6664cd94-2eaa-48da-be06-b8cfa0f76771"/>
+				</reportElement>
+				<text><![CDATA[device]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
@@ -52,6 +61,14 @@
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{stateString}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="284" y="0" width="100" height="15" uuid="a90d59fc-c551-45da-ade7-8215004f1b82">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6664cd94-2eaa-48da-be06-b8cfa0f76771"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$F{friendlyId}==9999]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{device}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
