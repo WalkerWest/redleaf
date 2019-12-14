@@ -10,6 +10,10 @@ public class RLPrefs {
 	private String ErpDbName;
 	private String ErpDbUser;
 	private String ErpDbPasswd;
+	private String InfluxUrl;
+	private String InfluxUser;
+	private String InfluxPasswd;
+	private String InfluxDb;
 
 	private Preferences pref;
 
@@ -34,7 +38,7 @@ public class RLPrefs {
 		} catch (BackingStoreException e) { e.printStackTrace(); }
 		System.out.println("Done reading preferences file!");
 
-		final int keyNumber=5;
+		final int keyNumber=9;
 		String[] prefKeys=new String[keyNumber];
 		
 		prefKeys[0]="ErpDbSrv";
@@ -42,6 +46,10 @@ public class RLPrefs {
 		prefKeys[2]="ErpDbName";
 		prefKeys[3]="ErpDbUser";
 		prefKeys[4]="ErpDbPasswd";
+		prefKeys[5]="InfluxUrl";
+		prefKeys[6]="InfluxUser";
+		prefKeys[7]="InfluxPasswd";
+		prefKeys[8]="InfluxDb";
 		
 		for ( String myKey : prefKeys ) {
 			//System.out.println(myKey);
@@ -53,6 +61,10 @@ public class RLPrefs {
 				else if(myKey.equals("ErpDbName")) pref.put(myKey, "Loader");				
 				else if(myKey.equals("ErpDbUser")) pref.put(myKey, "admin");				
 				else if(myKey.equals("ErpDbPasswd")) pref.put(myKey, "hedden");
+				else if(myKey.equals("InfluxUrl")) pref.put(myKey, "http://localhost:8086");
+				else if(myKey.equals("InfluxUser")) pref.put(myKey, "agsft");
+				else if(myKey.equals("InfluxPasswd")) pref.put(myKey, "agsft1234");
+				else if(myKey.equals("InfluxDb")) pref.put(myKey, "cuwb");
 			}
 			
 			if(myKey.equals("ErpDbSrv")) this.setErpDbSrv(pref.get(myKey,""));				
@@ -60,7 +72,10 @@ public class RLPrefs {
 			else if(myKey.equals("ErpDbName")) this.setErpDbName(pref.get(myKey,""));
 			else if(myKey.equals("ErpDbUser")) this.setErpDbUser(pref.get(myKey,""));				
 			else if(myKey.equals("ErpDbPasswd")) this.setErpDbPasswd(pref.get(myKey,""));
-			
+			else if(myKey.equals("InfluxUrl")) this.setInfluxUrl(pref.get(myKey, ""));
+			else if(myKey.equals("InfluxUser")) this.setInfluxUser(pref.get(myKey, ""));
+			else if(myKey.equals("InfluxPasswd")) this.setInfluxPasswd(pref.get(myKey, ""));
+			else if(myKey.equals("InfluxDb")) this.setInfluxDb(pref.get(myKey, ""));
 		}
 		
 	}
@@ -70,6 +85,11 @@ public class RLPrefs {
 	public String getErpDbName() { return ErpDbName; }
 	public String getErpDbUser() { return ErpDbUser; }
 	public String getErpDbPasswd() { return ErpDbPasswd; }
+	public String getInfluxUrl() { return InfluxUrl; }
+	public String getInfluxUser() {	return InfluxUser; }
+	public String getInfluxPasswd() { return InfluxPasswd; }
+	public String getInfluxDb() { return InfluxDb; }
+	
 	public void setErpDbSrv(String erpDbSrv,boolean storePref) {
 		if(storePref) pref.put("ErpDbSrv", erpDbSrv);
 		ErpDbSrv = erpDbSrv;
@@ -108,6 +128,39 @@ public class RLPrefs {
 	}
 	public void setErpDbPasswd(String erpDbPasswd) {
 		this.setErpDbPasswd(erpDbPasswd, false);
+	}
+
+	public void setInfluxUrl(String influxUrl,boolean storePref) {
+		if(storePref) pref.put("InfluxUrl", influxUrl);
+		InfluxUrl = influxUrl; 
+	}
+
+	public void setInfluxUrl(String influxUrl) { 
+		this.setInfluxUrl(influxUrl, false); 
+	}
+
+	public void setInfluxUser(String influxUser,boolean storePref) {
+		if(storePref) pref.put("InfluxUser", influxUser);
+		InfluxUser = influxUser;
+	}
+	public void setInfluxUser(String influxUser) {
+		this.setInfluxUser(influxUser, false);
+	}
+
+	public void setInfluxPasswd(String influxPasswd,boolean storePref) {
+		if(storePref) pref.put("InfluxPasswd", influxPasswd);
+		InfluxPasswd = influxPasswd;
+	}
+	public void setInfluxPasswd(String influxPasswd) {
+		this.setInfluxPasswd(influxPasswd, false);
+	}
+	
+	public void setInfluxDb(String influxDb) { 
+		this.setInfluxDb(influxDb, false);
+	}
+	public void setInfluxDb(String influxDb,boolean storePref) {
+		if(storePref) pref.put("InfluxDb", influxDb);
+		InfluxDb = influxDb;
 	}
 
 }

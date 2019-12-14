@@ -8,7 +8,7 @@ import org.influxdb.annotation.Measurement;
 import org.influxdb.annotation.TimeColumn;
 
 @Measurement(name="SpeedNforce V1",timeUnit=TimeUnit.NANOSECONDS)
-public class SpeedNForceV1 implements Comparable,Influxable {
+public class SpeedNForceV1 implements Comparable,ReportLinable {
 	
 	@TimeColumn
 	@Column(name="time")
@@ -25,8 +25,8 @@ public class SpeedNForceV1 implements Comparable,Influxable {
 	}
 	
 	@Column(name="Card ID")
-	private Integer cardId;
-	public Integer getCardId() { return cardId;	}
+	private String cardId;
+	public String getCardId() { return cardId;	}
 	
 	@Column(name="Device")
 	private String device;

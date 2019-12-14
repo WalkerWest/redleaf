@@ -11,7 +11,7 @@ import java.util.List;
 import com.google.gson.Gson;
 
 import redleaf.InfluxDB2Example;
-import redleaf.Influxable;
+import redleaf.ReportLinable;
 import redleaf.Reportable;
 import redleaf.WaterResult;
 import reports.water_sample.WaterFactory;
@@ -30,7 +30,7 @@ public class ProductivityReport implements Reportable {
 		  yLow=(float) -30.0, yHigh=(float) 250.0, 
 		  zLow=(float) 0.0,   zHigh=(float) 3.8;
 
-	public List<Influxable> runQuery() {
+	public List<ReportLinable> runQuery() {
 		try {
 			File forkFile=new File(getClass().getClassLoader().getResource("forklift.csv").getFile());
 			BufferedReader csvReader = new BufferedReader(new FileReader(forkFile));
@@ -73,5 +73,7 @@ public class ProductivityReport implements Reportable {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public boolean isEnabled() { return false; }
 
 }

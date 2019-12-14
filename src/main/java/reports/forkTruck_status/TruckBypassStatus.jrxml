@@ -4,7 +4,7 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DockLockStatus"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="TruckBypass"/>
 	<style name="Zebra" mode="Transparent">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 1]]></conditionExpression>
@@ -18,8 +18,8 @@
 		<![CDATA[]]>
 	</queryString>
 	<field name="friendlyId" class="java.lang.Integer"/>
-	<field name="dockStateString" class="java.lang.String">
-		<fieldDescription><![CDATA[dockStateString]]></fieldDescription>
+	<field name="truckBypassString" class="java.lang.String">
+		<fieldDescription><![CDATA[truckBypassString]]></fieldDescription>
 	</field>
 	<field name="device" class="java.lang.String">
 		<fieldDescription><![CDATA[device]]></fieldDescription>
@@ -35,19 +35,20 @@
 	</background>
 	<title>
 		<band height="79" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<staticText>
 				<reportElement x="0" y="3" width="60" height="40" uuid="bf31a3a6-d310-4d76-b04b-b132566e06aa"/>
 				<textElement>
 					<font fontName="FE Arial" size="22" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Q1:]]></text>
+				<text><![CDATA[Q2:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="44" y="3" width="320" height="40" uuid="19899178-320b-46ed-bc51-a74958d1581a"/>
 				<textElement>
 					<font fontName="FE Arial" size="22" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Dock Lock Status]]></text>
+				<text><![CDATA[Truck Bypass Status]]></text>
 			</staticText>
 			<image evaluationTime="Report">
 				<reportElement x="473" y="4" width="99" height="42" uuid="c224ff6e-f7ce-4cb3-9523-1906fab9ec8a">
@@ -74,7 +75,7 @@
 				<textFieldExpression><![CDATA["Printed on " + NOW( )]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="43" width="572" height="36" uuid="88760a73-05fa-4d78-9609-d1cf4d31282a"/>
+				<reportElement x="0" y="43" width="572" height="36" uuid="9d82bc85-b4e6-4949-b2e9-7081234ad236"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="FE Arial" size="14" isBold="true"/>
 				</textElement>
@@ -94,7 +95,7 @@
 				<textElement verticalAlignment="Middle">
 					<font fontName="FE Arial" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Dock No.]]></text>
+				<text><![CDATA[Truck No.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="75" y="0" width="100" height="15" forecolor="#FFFFFF" backcolor="#3E8E0E" uuid="1ef553de-22d5-45ac-b6ce-e63902ec790d">
@@ -104,7 +105,7 @@
 				<textElement verticalAlignment="Middle">
 					<font fontName="FE Arial" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Lock State]]></text>
+				<text><![CDATA[Bypass / Normal]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="175" y="0" width="100" height="15" forecolor="#FFFFFF" backcolor="#3E8E0E" uuid="7e6bdde7-d752-46e7-87fa-3067cf55d855">
@@ -138,7 +139,7 @@
 				</reportElement>
 				<box leftPadding="3"/>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{dockStateString}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{truckBypassString}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="Zebra" mode="Opaque" x="175" y="0" width="100" height="15" uuid="a90d59fc-c551-45da-ade7-8215004f1b82">

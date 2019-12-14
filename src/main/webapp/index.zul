@@ -1,4 +1,6 @@
-<?page title="Atlar5D Reports"?>
+<?page title="Q-Lytix"?>
+<?link rel="shortcut icon" type="image/x-icon" href="./q-favicon-300x300.png"?>
+<?link rel="icon" type="image/x-icon" href="./q-favicon-300x300.png"?>
 <zk>
 <style>
 .z-loading { top: 50% !important; left: 45% !important; align:
@@ -31,12 +33,18 @@
  .z-combobox-popup, .z-bandbox-popup, .z-datebox-popup, .z-timebox-popup { border: 1px solid #3e8e0e !important; }
   
 </style>
-<window title="Report Runner" border="normal"  width="548px" height="541px"
+<window title="Q-Lytix: Report Runner" border="normal"  width="548px" height="541px"
 	apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('redleaf.RedleafViewModel')"
-	mode="overlapped" position="center,middle"> 
+	mode="overlapped" position="center,middle" xmlns:h="http://www.w3.org/1999/xhtml"> 
 
 <!-- <label value="You are using: ${desktop.webApp.version}"/> -->
-<image src="/quarion_logo-450.png" height="100px"/>
+<div>
+<hlayout hflex="1">
+	<image src="/quarion_logo-450.png" height="100px"/>
+	<hbox hflex="1"><separator/></hbox>
+	<hbox><h:a href="/grafana/" style="font-family:Arial;font-weight:bold;">Grafana</h:a></hbox>
+</hlayout>
+</div>
 <groupbox form="@id('fx') @load(vm.params) @save(vm.params, before='save')">
     <grid hflex="true">
         <columns>

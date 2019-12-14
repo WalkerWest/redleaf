@@ -43,9 +43,11 @@ public class InfluxDB2Example implements Runnable {
 		//                                                 1574632535302732741
 		InfluxDB influx = InfluxDBFactory.connect(
 				//"http://192.168.174.28:8086","nouser",""
-				"http://localhost:8086","agsft","agsft1234"
+				RLSingle.getInstance().getPrefs().getInfluxUrl(),
+				RLSingle.getInstance().getPrefs().getInfluxUser(),
+				RLSingle.getInstance().getPrefs().getInfluxPasswd()
 			);
-		influx.setDatabase("cuwb");
+		influx.setDatabase(RLSingle.getInstance().getPrefs().getInfluxDb());
 		String queryStr="show tag values from \"Position\" with key = \"Device\" "
 				+ "where time >= "+start+" and time <= "+stop;
 		System.out.println("The queryStr is: "+queryStr);
@@ -92,9 +94,11 @@ public class InfluxDB2Example implements Runnable {
 	public void run() {
 		InfluxDB influx = InfluxDBFactory.connect(
 				//"http://192.168.174.28:8086","nouser",""
-				"http://localhost:8086","agsft","agsft1234"
+				RLSingle.getInstance().getPrefs().getInfluxUrl(),
+				RLSingle.getInstance().getPrefs().getInfluxUser(),
+				RLSingle.getInstance().getPrefs().getInfluxPasswd()
 			);
-		influx.setDatabase("cuwb");
+		influx.setDatabase(RLSingle.getInstance().getPrefs().getInfluxDb());
 		HashMap<String,List<Position>> netappData = new HashMap<String,List<Position>>();
 		String sqlQuery = "select X,Y,Z from Position "
 				+ "where Quality>0 and \"Anchor Count\" > 5 and "
@@ -158,7 +162,7 @@ public class InfluxDB2Example implements Runnable {
 				if(!cardSpeedNForcePairs.containsKey(entry.getCardId())) {
 					LinkedList<SpeedNForceV1> myList = new LinkedList<SpeedNForceV1>();
 					myList.add(entry);
-					cardSpeedNForcePairs.put(entry.getCardId(),myList);
+					cardSpeedNForcePairs.put(Integer.parseInt(entry.getCardId()),myList);
 				}
 				else 
 					cardSpeedNForcePairs.get(entry.getCardId()).add(entry);

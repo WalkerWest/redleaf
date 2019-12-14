@@ -16,7 +16,7 @@ public class ReportEngine {
 		List<Reportable> returnList = new ArrayList<Reportable>();
 		for (Reportable report:reports) {
 			System.out.println(report.getName());
-			returnList.add(report);
+			if(report.isEnabled()) returnList.add(report);
 		}
 		return returnList;
 	}

@@ -130,7 +130,7 @@ public class RedleafViewModel {
 	private JasperPrint runReport(
 			HashMap<String,Object> reportParams,
 			String jrResourceStream,
-			List<? extends Influxable> reportData) throws JRException {
+			List<? extends ReportLinable> reportData) throws JRException {
 		InputStream jasperStream = this.getClass().getClassLoader()
 				.getResourceAsStream(jrResourceStream);
 		try {

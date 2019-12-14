@@ -8,7 +8,7 @@ import org.influxdb.annotation.Measurement;
 import org.influxdb.annotation.TimeColumn;
 
 @Measurement(name="Pin State Report",timeUnit=TimeUnit.NANOSECONDS)
-public class PinState implements Influxable {
+public class PinState implements ReportLinable {
 	
 	@TimeColumn
 	@Column(name="time")
@@ -67,17 +67,28 @@ public class PinState implements Influxable {
 		if(friendlyId!=null) this.friendlyId = friendlyId;
 	}
 	
-	private String stateString;
-	public String getStateString() {
-		if (this.io5==null || this.io6==null) this.stateString="No Comms";
-		else if (this.io5==true && this.io6==false) this.stateString="Locked";
-		else if (this.io5==false && this.io6==true) this.stateString="Unlocked";
-		else if ((this.io5==true && this.io6==true)) this.stateString="Toggling";
-		else if ((this.io5==false && this.io6==false)) this.stateString="Toggling";
-		return this.stateString;
+	private String dockStateString;
+	public String getDockStateString() {
+		if (this.io5==null || this.io6==null) this.dockStateString="No Comms";
+		else if (this.io5==true && this.io6==false) this.dockStateString="Locked";
+		else if (this.io5==false && this.io6==true) this.dockStateString="Unlocked";
+		else if ((this.io5==true && this.io6==true)) this.dockStateString="Toggling";
+		else if ((this.io5==false && this.io6==false)) this.dockStateString="Toggling";
+		return this.dockStateString;
 	}
-	public void setStateString(String stateString) { 
-		this.stateString=stateString;
+	public void setDockStateString(String dockStateString) { 
+		this.dockStateString=dockStateString;
+	}
+	
+	private String truckBypassString;
+	public String getTruckBypassString() {
+		if (this.io4==null) this.truckBypassString="NO COMMS";
+		else if(this.io4==true) this.truckBypassString="TRUE";
+		else if(this.io4==false) this.truckBypassString="FALSE";
+		return this.truckBypassString;
+	}
+	public void setTruckBypassString(String truckBypassString) {
+		this.truckBypassString = truckBypassString;
 	}
 	
 }
