@@ -18,7 +18,10 @@ public class TruckBypassEntry implements ReportLinable {
 	public String getLiftTag() { return liftTag; }
 	public Integer getLiftId() { return liftId; }
 	public Boolean getMgrOvride() { return mgrOvride; }
-	public String getOperCardId() { return operCardId; }
+	public String getOperCardId() {
+		if(operCardId==null || operCardId.equals("0")) return "N/A";
+		else return operCardId; 
+	}
 	public String getOperName() { return operName; }
 	public Instant getOperLogonTime() { return operLogonTime; }
 	

@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -48,6 +50,11 @@ public class RedleafViewModel {
 		System.out.println("I am getting the report list ...");
 		ReportEngine engine = container.instance().select(ReportEngine.class).get();
 		List<Reportable> reportList=engine.getReports();
+		Collections.sort(reportList,new Comparator<Reportable>() {
+			public int compare(Reportable obj1,Reportable obj2) {
+				return obj1.getName().compareTo(obj2.getName());
+			}
+		});
 		for(Reportable report:reportList) reportModel.add(report);
 		weld.shutdown();
 	}

@@ -1,6 +1,7 @@
 package redleaf;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.concurrent.TimeUnit;
 
 import org.influxdb.annotation.Column;
@@ -13,7 +14,11 @@ public class PinState implements ReportLinable {
 	@TimeColumn
 	@Column(name="time")
 	private Instant time;
-	public Instant getTime() { return time; }
+	public Instant getTime() { 
+		Instant now = Instant.now();
+		long milliDif = now.toEpochMilli()-(time.toEpochMilli()/1000000);
+		return now.minus(milliDif,ChronoUnit.MILLIS); 
+	}
 	public void setTime(Instant time) {	this.time = time; }
 
 	@Column(name="Device")
@@ -48,16 +53,16 @@ public class PinState implements ReportLinable {
 		this.pinState = pinState;
 	}
 
-	@Column(name="last_IO1") private Boolean io1;
-	@Column(name="last_IO2") private Boolean io2;
-	@Column(name="last_IO3") private Boolean io3;
-	@Column(name="last_IO4") private Boolean io4;
-	@Column(name="last_IO5") private Boolean io5;
-	@Column(name="last_IO6") private Boolean io6;
-	@Column(name="last_IO7") private Boolean io7;
-	@Column(name="last_Network Time") private String networkTime;
-	@Column(name="last_Pin Bank") private Integer pinBank;
-	@Column(name="last_Pin State") private Integer pinState;
+	@Column(name="IO1") private Boolean io1;
+	@Column(name="IO2") private Boolean io2;
+	@Column(name="IO3") private Boolean io3;
+	@Column(name="IO4") private Boolean io4;
+	@Column(name="IO5") private Boolean io5;
+	@Column(name="IO6") private Boolean io6;
+	@Column(name="IO7") private Boolean io7;
+	@Column(name="Network Time") private String networkTime;
+	@Column(name="Pin Bank") private Integer pinBank;
+	@Column(name="Pin State") private Integer pinState;
 	
 	public PinState() { }
 	

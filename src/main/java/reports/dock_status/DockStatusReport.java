@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
+import org.influxdb.InfluxDBIOException;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.influxdb.impl.InfluxDBResultMapper;
@@ -77,7 +78,7 @@ public class DockStatusReport implements Reportable {
 		doors.put("01040398",92);		
 	}
 
-	public String getName() { return "Dock Lock Status"; }
+	public String getName() { return "Q1: Dock Lock Status"; }
 	
 	public List<PinState> runQuery() {
 		List<PinState> dockList = new ArrayList<PinState>();
@@ -87,26 +88,39 @@ public class DockStatusReport implements Reportable {
 				RLSingle.getInstance().getPrefs().getInfluxPasswd()
 			);
 		influx.setDatabase(RLSingle.getInstance().getPrefs().getInfluxDb());
-		String sqlQuery = "select last(*) from \"Pin State Report\" where "
-				+ "time >= now()-2000ms and Device=~/01040/ group by Device";
+		String sqlQuery = "select * from \"Pin State Report\" where "
+				+ "time >= now()-1d and Device=~/01040/ group by Device "
+				+ "order by time desc limit 1";
 		Query query = new Query(sqlQuery);
 		TimeUnit timeUnit = TimeUnit.NANOSECONDS;
-		QueryResult r = influx.query(query, timeUnit);
-		InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
-		dockList=resultMapper.toPOJO(r, PinState.class);
-		Gson gson = new Gson();
-		int mySize=dockList.size();
-		System.out.println(mySize);
-		if(mySize>0) {
-			System.out.println(gson.toJson(dockList.get(0)));
-			for(PinState ps : dockList) {
-				ps.setFriendlyId(doors.get(ps.getDevice()));
+		QueryResult r = null;
+		int tryCount=0;
+		while(tryCount++<10) {
+			try {
+				r = influx.query(query, timeUnit);
+				break;
+			} catch (InfluxDBIOException e) {
+				System.out.println("Try #"+tryCount+" has failed");
 			}
-			Collections.sort(dockList,new Comparator<PinState>() {
-				public int compare(PinState obj1,PinState obj2) {
-					return obj1.getFriendlyId().compareTo(obj2.getFriendlyId());
+		}
+		if (r!=null) {
+			InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
+			dockList=resultMapper.toPOJO(r, PinState.class);
+			Gson gson = new Gson();
+			int mySize=dockList.size();
+			System.out.println(mySize);
+			if(mySize>0) {
+				System.out.println(gson.toJson(dockList.get(0)));
+				for(PinState ps : dockList) {
+					ps.setFriendlyId(doors.get(ps.getDevice()));
 				}
-			});
+				Collections.sort(dockList,new Comparator<PinState>() {
+					public int compare(PinState obj1,PinState obj2) {
+						return obj1.getFriendlyId().
+								compareTo(obj2.getFriendlyId());
+					}
+				});
+			}
 		}
 		return dockList;
 	}
@@ -117,7 +131,8 @@ public class DockStatusReport implements Reportable {
 		if(reportFilename==null) {
 			String reportPath=RLSingle.getInstance().getDeploymentDirectory();
 			System.out.println("The report path is "+reportPath);
-			String reportFilename="DockLockStatus-"+System.currentTimeMillis()+".pdf";
+			String reportFilename="DockLockStatus-"+
+					System.currentTimeMillis()+".pdf";
 			this.reportFilename=reportPath+reportFilename;
 		}
 		return reportFilename;

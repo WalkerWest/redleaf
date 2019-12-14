@@ -1,6 +1,7 @@
 package redleaf;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.concurrent.TimeUnit;
 
 import org.influxdb.annotation.Column;
@@ -21,12 +22,19 @@ public class SpeedNForceV1 implements Comparable,ReportLinable {
 		Long secsLeftOver = (myLowLong%1000);
 		return Instant.ofEpochSecond(myLowSecs/1000,(secsLeftOver+leftOver)/1000);
 		*/
-		return time;
+		Instant now = Instant.now();
+		long milliDif = now.toEpochMilli()-(time.toEpochMilli()/1000000);
+		return now.minus(milliDif,ChronoUnit.MILLIS); 
 	}
-	
-	@Column(name="Card ID")
+
+	@Column(name="Card ID") private Integer regCardId;	
+	@Column(name="last_Card ID") private Integer lastCardId;
 	private String cardId;
-	public String getCardId() { return cardId;	}
+	public String getCardId() {
+		if (regCardId!=null) cardId=regCardId.toString();
+		else if (lastCardId!=null) cardId=lastCardId.toString();
+		return cardId;
+	}
 	
 	@Column(name="Device")
 	private String device;
