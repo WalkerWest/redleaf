@@ -82,6 +82,14 @@ public class ProductivityReport implements Reportable {
 		InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
 		List<PalletSensorV1> palletList=resultMapper.toPOJO(r, PalletSensorV1.class);
 		System.out.println("I found "+palletList.size()+" entries!");
+		List<String> hitList = new ArrayList<String>();
+		for(PalletSensorV1 pallet : palletList) {
+			if(!hitList.contains(pallet.getDevice())) {
+				System.out.print("Pallet sensor is "+pallet.getDevice());
+				System.out.println("; matching forklist is "+palletMap.get(pallet.getDevice().substring(1)));
+				hitList.add(pallet.getDevice());
+			}
+		}
 		//Gson gson = new Gson();
 		
 		return null;
