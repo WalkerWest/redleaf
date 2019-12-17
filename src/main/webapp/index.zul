@@ -61,13 +61,13 @@
         		</template>
         		</combobox>
         	</row>
-            <row visible="@bind(vm.selectedReport.name eq 'Productivity')">
+            <row visible="@bind(vm.selectedReport.name eq 'Q3: Productivity')">
                 Start <datebox format="long+medium" cols="12" value="@bind(fx.start)" width="275px"/>
             </row>
-            <row visible="@bind(vm.selectedReport.name eq 'Productivity')">
+            <row visible="@bind(vm.selectedReport.name eq 'Q3: Productivity')">
                 Stop <datebox format="long+medium" cols="12" value="@bind(fx.stop)" width="275px"/>
             </row>
-            <row visible="@bind(vm.selectedReport.name eq 'Productivity')">
+            <row visible="@bind(vm.selectedReport.name eq 'Q3: Productivity')">
                 Driver <intbox value="@bind(fx.driver) "/>
             </row>
             <row>

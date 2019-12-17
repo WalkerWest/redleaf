@@ -23,16 +23,24 @@ public class PalletSensorV1 {
 		return now.minus(milliDif,ChronoUnit.MILLIS); 
 	}
 	
-	@Column(name="Sonar Range") private float sonarRange;
-	public float getSonarRange() { return sonarRange; }
-	public void setSonarRange(float sonarRange) { this.sonarRange = sonarRange; }
+	@Column(name="Sonar Range") private double sonarRange;
+	public double getSonarRange() { return sonarRange; }
+	public void setSonarRange(double sonarRange) { this.sonarRange = sonarRange; }
 	
-	@Column(name="Sonar Average") private float sonarAvg;
-	public float getSonarAvg() { return sonarAvg; }
-	public void setSonarAvg(float sonarAvg) { this.sonarAvg = sonarAvg; }
+	@Column(name="Sonar Average") private double sonarAvg;
+	public double getSonarAvg() { return sonarAvg; }
+	public void setSonarAvg(double sonarAvg) { this.sonarAvg = sonarAvg; }
 
 	@Column(name="Device") private String device;
 	public void setDevice(String device) { this.device=device.toUpperCase(); }
 	public String getDevice() { return device; }
+	
+	@Column(name="vl53l1 Flags") private Integer vl53l1flags;
+	public Integer getVl53l1flags() { return vl53l1flags; }
+	public void setVl53l1flags(Integer vl53l1flags) { this.vl53l1flags = vl53l1flags; }
+	
+	@Column(name="vl53l1 Range") private double vl53l1range;
+	public double getVl53l1range() { return vl53l1range; }
+	public void setVl53l1range(double vl53l1range) { this.vl53l1range = vl53l1range; }
 
 }

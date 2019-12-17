@@ -22,6 +22,7 @@ import org.influxdb.impl.InfluxDBResultMapper;
 
 import com.google.gson.Gson;
 
+import redleaf.PalletSensorV1;
 import redleaf.Position;
 import redleaf.RLSingle;
 import redleaf.ReportLinable;
@@ -34,6 +35,16 @@ public class ProductivityReport implements Reportable {
 	public String getReportFilename() { return null; }
 	public String getJrResourceStream() { return null; }
 	public boolean isEnabled() { return true; }
+	
+	private static InfluxDB influx = InfluxDBFactory.connect(
+			//"http://192.168.174.28:8086","nouser",""
+			RLSingle.getInstance().getPrefs().getInfluxUrl(),
+			RLSingle.getInstance().getPrefs().getInfluxUser(),
+			RLSingle.getInstance().getPrefs().getInfluxPasswd()
+		);
+	static {
+		influx.setDatabase(RLSingle.getInstance().getPrefs().getInfluxDb());
+	}
 	
 	// 0.0 140.0 -30.0 250.0 0.0 3.8
 	float xLow=(float) 0.0,   xHigh=(float) 140.0, 
@@ -55,22 +66,46 @@ public class ProductivityReport implements Reportable {
 		liftToCard = new HashMap<String,HashMap<Integer,List<Instant>>>();		
 	
 	public List<ReportLinable> runQuery() {
+		
+		// Initialize common, reporting data structures
+		boolean debug=true;
+		reportPrep(debug);
+		
+		String queryStr="select \"Sonar Range\", \"vl53l1 Flags\", \"vl53l1 Range\", "
+				+ "Device from \"Pallet Sensor V1\" "
+				+ "where time >= "+start+" and time <= "+stop+" "
+				+ "group by Device";
+		System.out.println("The query is: "+queryStr);
+		Query query = new Query(queryStr);
+		TimeUnit timeUnit = TimeUnit.NANOSECONDS;
+		QueryResult r = influx.query(query, timeUnit);
+		InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
+		List<PalletSensorV1> palletList=resultMapper.toPOJO(r, PalletSensorV1.class);
+		System.out.println("I found "+palletList.size()+" entries!");
+		//Gson gson = new Gson();
+		
+		return null;
+	}
+	
+	public void reportPrep(boolean debug) {
 		Gson gson = new Gson();
 
 		getMapsFromForkCsv();
-		System.out.println("The palletMap is:" +gson.toJson(palletMap));
-		System.out.println("The truckMap is:" +gson.toJson(truckMap));		
+		if(debug) System.out.println("The palletMap is:" +gson.toJson(palletMap));
+		if(debug) System.out.println("The truckMap is:" +gson.toJson(truckMap));		
 		
 		getValidDevs();
-		System.out.println("Valid devices: "+gson.toJson(validDevs));
+		if(debug) System.out.println("Valid devices: "+gson.toJson(validDevs));
 		
 		
 		getPositions();
 		System.out.println("Position entries per truck:");
-		for(String dev:validDevs) {
-			if(positions.containsKey(dev)) 
-				System.out.println("    "+dev+": "+positions.get(dev).size());
-			else System.out.println("    "+dev+": 0");
+		if(debug) {
+			for(String dev:validDevs) {
+				if(positions.containsKey(dev)) 
+					System.out.println("    "+dev+": "+positions.get(dev).size());
+				else System.out.println("    "+dev+": 0");
+			}
 		}
 		
 		getDrivers();
@@ -86,17 +121,12 @@ public class ProductivityReport implements Reportable {
 		// }
 		
 		buildTimeMaps();
-		System.out.println(gson.toJson(cardToLift));
-		System.out.println(gson.toJson(liftToCard));
+		if(debug) System.out.println(gson.toJson(cardToLift));
+		if(debug) System.out.println(gson.toJson(liftToCard));
 		
-		calcProductivity();
-		return null;
-	}
-	
-	public void calcProductivity() {
 		return;
 	}
-
+	
 	public void getMapsFromForkCsv() {
 		try {
 			File forkFile=new File(getClass().getClassLoader().getResource("forklift.csv").getFile());
@@ -114,13 +144,6 @@ public class ProductivityReport implements Reportable {
 	
 	public void getValidDevs() {
 		List<String> availDevs = new ArrayList<String>();
-		InfluxDB influx = InfluxDBFactory.connect(
-				//"http://192.168.174.28:8086","nouser",""
-				RLSingle.getInstance().getPrefs().getInfluxUrl(),
-				RLSingle.getInstance().getPrefs().getInfluxUser(),
-				RLSingle.getInstance().getPrefs().getInfluxPasswd()
-			);
-		influx.setDatabase(RLSingle.getInstance().getPrefs().getInfluxDb());
 		String queryStr="show tag values from \"Position\" with key = \"Device\" "
 				+ "where time >= "+start+" and time <= "+stop;
 		Query query = new Query(queryStr);
@@ -139,13 +162,6 @@ public class ProductivityReport implements Reportable {
 	}
 	
 	public void getPositions() {
-		InfluxDB influx = InfluxDBFactory.connect(
-				//"http://192.168.174.28:8086","nouser",""
-				RLSingle.getInstance().getPrefs().getInfluxUrl(),
-				RLSingle.getInstance().getPrefs().getInfluxUser(),
-				RLSingle.getInstance().getPrefs().getInfluxPasswd()
-			);
-		influx.setDatabase(RLSingle.getInstance().getPrefs().getInfluxDb());
 		String sqlQuery = "select X,Y,Z from Position "
 				+ "where Quality>0 and \"Anchor Count\" > 5 and "
 				+ "time >= %s and time <= %s and Device='%s' "
@@ -162,13 +178,6 @@ public class ProductivityReport implements Reportable {
 	}
 	
 	public void getDrivers() {
-		InfluxDB influx = InfluxDBFactory.connect(
-				//"http://192.168.174.28:8086","nouser",""
-				RLSingle.getInstance().getPrefs().getInfluxUrl(),
-				RLSingle.getInstance().getPrefs().getInfluxUser(),
-				RLSingle.getInstance().getPrefs().getInfluxPasswd()
-			);
-		influx.setDatabase(RLSingle.getInstance().getPrefs().getInfluxDb());
 		String cardQuery ="select \"Card ID\", \"Device\" from \"SpeedNforce V1\" where "
 				+ "time >= %s and time <= %s and Device='%s'";
 		for (String dev : validDevs) {
