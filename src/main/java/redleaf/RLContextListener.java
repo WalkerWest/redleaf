@@ -14,8 +14,6 @@ import javax.servlet.ServletContextListener;
 
 import com.google.gson.Gson;
 
-import redleaf.WaterResult;
-
 public class RLContextListener implements ServletContextListener {
 
 	//@Override
