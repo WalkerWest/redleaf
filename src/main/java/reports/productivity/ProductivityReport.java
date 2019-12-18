@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -53,14 +54,38 @@ public class ProductivityReport implements Reportable {
 		this.reportDriver = reportDriver;
 	}
 	
+	private static String start= "1571860800000000000";
+	private static String stop= "1571862240000000000";
+	
+	private Instant reportStart;
+	public Instant getReportStart() { return reportStart; }
+	public void setReportStart(Instant reportStart) {
+		this.reportStart = reportStart;
+	}
+
+	private Instant reportStop;
+	public Instant getReportStop() { return reportStop; }
+	public void setReportStop(Instant reportStop) {
+		this.reportStop = reportStop;
+	}
+	
 	// 0.0 140.0 -30.0 250.0 0.0 3.8
 	float xLow=(float) 0.0,   xHigh=(float) 140.0, 
 		  yLow=(float) -30.0, yHigh=(float) 250.0, 
 		  zLow=(float) 0.0,   zHigh=(float) 3.8;
 	
-	private static String start= "1571860800000000000";
-	private static String stop= "1571862240000000000";
-
+	public ProductivityReport () {
+		Clock myClock = Clock.systemUTC();
+		Instant myInstant = myClock.instant();
+		System.out.println("The current time is "+myInstant.toEpochMilli());
+		Long startDiff=myInstant.toEpochMilli()-Long.parseLong(start)/100000;
+		Long stopDiff=myInstant.toEpochMilli()-Long.parseLong(stop)/100000;
+		reportStart=myInstant.minusMillis(startDiff);
+		reportStop=myInstant.minusMillis(stopDiff);
+		System.out.println("The reportStart is "+reportStart.toEpochMilli());
+		System.out.println("The reportStop is "+reportStop.toEpochMilli());
+	}
+	
 	private HashMap<String,String> palletMap = new HashMap<String,String>();
 	private HashMap<String,String> truckMap = new HashMap<String,String>();
 	private List<String> validDevs=new ArrayList<String>();
@@ -158,13 +183,23 @@ public class ProductivityReport implements Reportable {
 			if (positions.get(truck)==null || positions.get(truck).size()==0)
 				System.out.println ("No position data for truck "+truck);
 			else {
+				String forklift = truckMap.get(truck.toUpperCase()); 
+				if (forklift==null) forklift = truck;
+				forklifts.add(forklift);
 				System.out.println ("Found "+positions.get(truck).size() +
-						" entries for truck "+truck);
-				/*
+						" entries for truck "+truck+" ("+forklift+")");
 				for (Position pos : positions.get(truck)) {
+					if(pos.getTime().isAfter(reportStart) && 
+							pos.getTime().isBefore(reportStop)) {
+						// System.out.println("The data is good!");
+					} else {
+						System.out.println("Data not in range: "+
+								reportStart.getEpochSecond() + " < " +
+								pos.getTime().getEpochSecond() + " < " +
+								reportStop.getEpochSecond());
+					}
 					
 				}
-				*/
 			}
 		}
 		

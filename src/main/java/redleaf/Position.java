@@ -1,6 +1,7 @@
 package redleaf;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.concurrent.TimeUnit;
 
 import org.influxdb.annotation.Column;
@@ -27,6 +28,10 @@ public class Position {
 	@TimeColumn
 	@Column(name="time")
 	private Instant time;
-	public Instant getTime() { return time; }
+	public Instant getTime() { 
+		Instant now = Instant.now();
+		long milliDif = now.toEpochMilli()-(time.toEpochMilli()/100000);
+		return now.minus(milliDif,ChronoUnit.MILLIS); 
+	}
 		
 }
