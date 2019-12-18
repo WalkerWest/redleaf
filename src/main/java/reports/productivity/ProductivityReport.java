@@ -148,10 +148,28 @@ public class ProductivityReport implements Reportable {
 			totalTime=totalTime.plus(Duration.between(
 					cardToLift.get(reportDriver).get(truck).get(1),
 					cardToLift.get(reportDriver).get(truck).get(0)));
+			if (rangeData.get(truck)==null || rangeData.get(truck).size()==0) 
+				System.out.println ("No sensor data for truck "+truck);
+			else {
+				for (PalletSensorV1 palletEntry : rangeData.get(truck)) {
+					
+				}
+			}
+			if (positions.get(truck)==null || positions.get(truck).size()==0)
+				System.out.println ("No position data for truck "+truck);
+			else {
+				System.out.println ("Found "+positions.get(truck).size() +
+						" entries for truck "+truck);
+				/*
+				for (Position pos : positions.get(truck)) {
+					
+				}
+				*/
+			}
 		}
 		
 		System.out.println("The totalTime is "+totalTime);
-		
+				
 		return null;
 	}
 	
